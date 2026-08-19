@@ -1,19 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Product struct {
 	name  string
 	price float64
 }
 
-func main() {
-	products := []Product{
-		{name: "Mouse", price: 10.0},
-		{name: "Teclado", price: 20.0},
-		{name: "Audifonos", price: 30.0},
-	}
+var products = []Product{
+	{name: "Mouse", price: 10.0},
+	{name: "Teclado", price: 20.0},
+	{name: "Audifonos", price: 30.0},
+}
 
+func main() {
 	for {
 		fmt.Println("Menu:")
 		fmt.Println("1. List products")
@@ -26,10 +29,7 @@ func main() {
 
 		switch choice {
 		case 1:
-			for _, product := range products {
-				fmt.Printf("Name: %s, Price: %.2f\n", product.name, product.price)
-			}
-
+			listProducts()
 		case 2:
 			var name string
 			var price float64
@@ -40,6 +40,7 @@ func main() {
 			products = append(products, Product{name: name, price: price})
 
 		case 3:
+			listProducts()
 			var name string
 			var price float64
 			fmt.Println("Enter product name:")
@@ -47,16 +48,21 @@ func main() {
 			fmt.Println("Enter product price:")
 			fmt.Scanln(&price)
 			for i, product := range products {
-				if product.name == name {
+				if strings.EqualFold(product.name, strings.TrimSpace(name)) {
 					products[i].price = price
 					break
 				}
 			}
-			fmt.Println("Error ese producto no existe")
 		case 4:
 			return
 		default:
 			fmt.Println("Invalid choice")
 		}
+	}
+}
+
+func listProducts() {
+	for _, product := range products {
+		fmt.Printf("Name: %s, Price: %.2f\n", product.name, product.price)
 	}
 }
